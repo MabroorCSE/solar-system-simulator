@@ -2,7 +2,7 @@ import pygame
 import sys
 from bodies import Body
 from physics import apply_gravity
-from constants import SUN_MASS, G
+from constants import SUN_MASS, G, TRAIL_NUM
 
 pygame.init()
 
@@ -19,6 +19,13 @@ Bodies = [
     Body(5, 15, (0, 255, 255), 240, 300, 0, -1.6), #Planet 2
 ]
 
+#Stores last TRAIL_NUM positions of every body
+Trails = [
+    [], #Sun
+    [], #Planet1
+    [], #Planet2
+]
+
 
 
 while True:
@@ -29,12 +36,24 @@ while True:
 
     screen.fill((0, 0, 0))  # black background
 
-    for body in Bodies:
+    for i,body in enumerate(Bodies):
         body_position = (int(body.position[0]), int(body.position[1]))
+        if i>0:
+            Trails[i].append(body_position)
+            if len(Trails[i]) > TRAIL_NUM:
+                Trails[i].pop(0)
+
+            #if len(Trails[i]) > 1:
+                
+
+        
+
         pygame.draw.circle(screen, body.colour, body_position, body.size)
 
-    
+    print (Trails)
+
     for i in range (len(Bodies)):
+
         for j in range (i+1, len(Bodies)):
             apply_gravity(Bodies[i], Bodies[j])
 
