@@ -15,16 +15,14 @@ clock = pygame.time.Clock()
 
 Bodies = [
     Body(SUN_MASS, 30, (255, 255, 0), 640, 360, 0, 0), #Sun
-    Body(1, 10, (255, 255, 255), 640, 500, 3.2, 0), #Planet1
+    #Body(1, 10, (255, 255, 255), 650, 500, 3.2, 0), #Planet1
     Body(5, 15, (0, 255, 255), 240, 300, 0, -1.6), #Planet 2
+    #Body(100, 8, (255, 0, 0), 800, 650, 2, 1), #Planet 3
+    #Body(5000, 12, (20, 200, 45), 100, 700, 0.5, -1.5) #Planet 3
 ]
 
 #Stores last TRAIL_NUM positions of every body
-Trails = [
-    [], #Sun
-    [], #Planet1
-    [], #Planet2
-]
+Trails = [ [] for _ in Bodies]
 
 
 
@@ -42,20 +40,13 @@ while True:
             Trails[i].append(body_position)
             if len(Trails[i]) > TRAIL_NUM:
                 Trails[i].pop(0)
-
-            #if len(Trails[i]) > 1:
-                
-
-        
+            if len(Trails[i]) > 1:
+                pygame.draw.lines(screen, body.colour, False, Trails[i], 2)
 
         pygame.draw.circle(screen, body.colour, body_position, body.size)
 
-    print (Trails)
+    apply_gravity(Bodies)
 
-    for i in range (len(Bodies)):
-
-        for j in range (i+1, len(Bodies)):
-            apply_gravity(Bodies[i], Bodies[j])
 
     pygame.display.flip()
     clock.tick(60)  # 60 fps cap
