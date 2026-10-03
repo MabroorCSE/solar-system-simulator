@@ -1,8 +1,8 @@
 import pygame
 import sys
-from bodies import Body
+from bodies import create_bodies
 from physics import apply_gravity
-from constants import SUN_MASS, G, TRAIL_NUM
+from constants import SUN_MASS, G, TRAIL_NUM, SUBSTEPS
 
 pygame.init()
 
@@ -13,13 +13,7 @@ pygame.display.set_caption("Solar System Simulator")
 clock = pygame.time.Clock()
 
 
-Bodies = [
-    Body(SUN_MASS, 30, (255, 255, 0), 640, 360, 0, 0), #Sun
-    Body(10, 10, (255, 255, 255), 650, 500, 3.2, 0), #Planet1
-    Body(50, 15, (0, 255, 255), 240, 300, 0, -1.1), #Planet 2
-    Body(100, 8, (255, 0, 0), 800, 650, -2.5, -0.5), #Planet 3
-    Body(50, 12, (20, 200, 45), 240, 450, 0.5, -1.5) #Planet 3
-]
+Bodies = create_bodies(SUN_MASS)
 
 #Stores last TRAIL_NUM positions of every body
 Trails = [ [] for _ in Bodies]
@@ -45,7 +39,8 @@ while True:
 
         pygame.draw.circle(screen, body.colour, body_position, body.size)
 
-    apply_gravity(Bodies)
+    for _ in range(SUBSTEPS):
+        apply_gravity(Bodies, 1 / SUBSTEPS)
 
 
     pygame.display.flip()
