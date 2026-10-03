@@ -9,4 +9,3 @@ class Body:
         self.velocity = np.array([vel_x, vel_y], dtype=float)
 
 
-#Trail function to give the moving objects a streak
